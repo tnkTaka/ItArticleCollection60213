@@ -28,7 +28,7 @@ import java.util.HashMap;
 /**
  * 非同期でサーバと通信し、ListVewに表示するJSONを取得 & SETするクラス
  */
-public class GetListArticles extends AsyncTask<String, String, String> {
+public class GetListArticles extends AsyncTask<String, Void, String> {
 
     private static final String DEBUG_TAG = "GetListArticles";
 
@@ -51,8 +51,8 @@ public class GetListArticles extends AsyncTask<String, String, String> {
             URL url = new URL(urlStr);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
-            con.setConnectTimeout(50000);
-            con.setReadTimeout(50000);
+            con.setConnectTimeout(5000);
+            con.setReadTimeout(5000);
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
             os.flush();
@@ -85,11 +85,6 @@ public class GetListArticles extends AsyncTask<String, String, String> {
         }
 
         return result;
-    }
-
-    @Override
-    public void onProgressUpdate(String... values) {
-        super.onProgressUpdate(values);
     }
 
     @Override

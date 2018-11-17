@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 public class ArticleListActivity extends AppCompatActivity {
 
-    private static final String ACCESS_URL = "http://hal.architshin.com/st32/getItArticlesList.php";
+    private static final String GET_ACCESS_URL = "http://hal.architshin.com/st32/getItArticlesList.php";
     private static ArticleListActivity instance = null;
     private ListView _listView;
 
@@ -24,7 +24,7 @@ public class ArticleListActivity extends AppCompatActivity {
         _listView = findViewById(R.id.listView);
 
         GetListArticles getListArticles = new GetListArticles(_listView);
-        getListArticles.execute(ACCESS_URL);
+        getListArticles.execute(GET_ACCESS_URL);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ArticleListActivity extends AppCompatActivity {
         Log.d("検証","RS");
 
         GetListArticles getListArticles = new GetListArticles(_listView);
-        getListArticles.execute(ACCESS_URL);
+        getListArticles.execute(GET_ACCESS_URL);
     }
 
     public void onNewButtonClick(View view) {

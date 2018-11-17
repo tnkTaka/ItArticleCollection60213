@@ -9,5 +9,4 @@
         android:icon="@android:drawable/ic_menu_save"
         android:title="Add"
         app:showAsAction="always|withText" />
-
 </menu>
