@@ -46,10 +46,8 @@ public class GetListArticles extends AsyncTask<String, String, String> {
         HttpURLConnection con = null;
         InputStream is = null;
         String result = "";
-        Log.d("検証","検証2");
 
         try {
-            Log.d("検証","検証3");
             URL url = new URL(urlStr);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -63,7 +61,6 @@ public class GetListArticles extends AsyncTask<String, String, String> {
             if (status != 200) {
                 throw new IOException("ステータスコード:" + status);
             }
-            Log.d("検証","検証5");
             is = con.getInputStream();
 
             result = is2String(is);
@@ -98,8 +95,6 @@ public class GetListArticles extends AsyncTask<String, String, String> {
     @Override
     public void onPostExecute(String data) {
         if (_success) {
-            Log.d("検証","検証4");
-
             final ArrayList<HashMap<String, String>> list_data = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> hashTmp = new HashMap<String, String>();
 
