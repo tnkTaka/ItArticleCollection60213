@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">ItArticleCollection60213</string>
+
+    <string name="dig_msg_title">タイトル： </string>
+    <string name="dig_msg_url">URL： </string>
+    <string name="dig_msg_comment">コメント： </string>
+    <string name="dig_msg_name">氏名： </string>
+    <string name="dig_msg_student_id">学籍番号： </string>
+    <string name="dig_msg_seat_no">出席番号： </string>
+    <string name="dig_msg_status">ステータス： </string>
+    <string name="dig_msg_status_message">メッセージ： </string>
+    <string name="dig_msg_timestamp">データ登録時間： </string>
+
+    <string name="msg_send_before">サーバにデータを送信します。</string>
+    <string name="msg_send_after">サーバにデータを送信しました。</string>
+    <string name="msg_parse_before">サーバからの返信内容の解析を開始します。</string>
+    <string name="msg_parse_after">サーバからの返信内容の解析が終了しました。</string>
+    <string name="msg_err_send">サーバ通信に失敗しました。もう一度送信をお願いします。</string>
+    <string name="msg_err_timeout">サーバ通信がタイムアウトしました。もう一度送信をお願いします。</string>
+    <string name="msg_err_parse">サーバからの返信内容の解析に失敗しました。もう一度送信をお願いします。</string>
 </resources>

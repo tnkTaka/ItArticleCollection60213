@@ -28,7 +28,7 @@ import java.util.HashMap;
 /**
  * 非同期でサーバと通信し、ListVewに表示するJSONを取得 & SETするクラス
  */
-public class GetListArticles extends AsyncTask<String, String, String> {
+public class GetListArticles extends AsyncTask<String, Void, String> {
 
     private static final String DEBUG_TAG = "GetListArticles";
 
@@ -51,8 +51,8 @@ public class GetListArticles extends AsyncTask<String, String, String> {
             URL url = new URL(urlStr);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
-            con.setConnectTimeout(50000);
-            con.setReadTimeout(50000);
+            con.setConnectTimeout(5000);
+            con.setReadTimeout(5000);
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
             os.flush();
@@ -66,10 +66,13 @@ public class GetListArticles extends AsyncTask<String, String, String> {
             result = is2String(is);
             _success = true;
         } catch (SocketTimeoutException ex) {
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
             Log.e(DEBUG_TAG, "タイムアウト", ex);
         } catch (MalformedURLException ex) {
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
             Log.e(DEBUG_TAG, "URL変換失敗", ex);
         } catch (IOException ex) {
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
             Log.e(DEBUG_TAG, "通信失敗", ex);
         } finally {
             if (con != null) {
@@ -80,16 +83,12 @@ public class GetListArticles extends AsyncTask<String, String, String> {
                     is.close();
                 }
             } catch (IOException ex) {
+                Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
                 Log.e(DEBUG_TAG, "InputStream解析失敗", ex);
             }
         }
 
         return result;
-    }
-
-    @Override
-    public void onProgressUpdate(String... values) {
-        super.onProgressUpdate(values);
     }
 
     @Override
@@ -113,6 +112,7 @@ public class GetListArticles extends AsyncTask<String, String, String> {
                     list_data.add(new HashMap<String, String>(hashTmp));
                 }
             } catch (JSONException ex) {
+                Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
                 Log.e(DEBUG_TAG, "JSON解析失敗", ex);
             }
 
@@ -127,11 +127,11 @@ public class GetListArticles extends AsyncTask<String, String, String> {
                     Intent intent = new Intent(ArticleListActivity.getInstance().getApplication(), ArticleDetailActivity.class);
                     intent.putExtra("hashMapKey",list_data.get(position));
                     ArticleListActivity.getInstance().startActivity(intent);
-
-                    // HashMap<String, String> hashTmp = (HashMap<String, String>) getIntent().getExtras().get("hashMapKey");
                 }
             });
 
+        } else {
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
         }
     }
 
