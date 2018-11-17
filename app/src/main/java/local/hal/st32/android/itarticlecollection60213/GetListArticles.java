@@ -66,10 +66,13 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
             result = is2String(is);
             _success = true;
         } catch (SocketTimeoutException ex) {
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
             Log.e(DEBUG_TAG, "タイムアウト", ex);
         } catch (MalformedURLException ex) {
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
             Log.e(DEBUG_TAG, "URL変換失敗", ex);
         } catch (IOException ex) {
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
             Log.e(DEBUG_TAG, "通信失敗", ex);
         } finally {
             if (con != null) {
@@ -80,6 +83,7 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
                     is.close();
                 }
             } catch (IOException ex) {
+                Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
                 Log.e(DEBUG_TAG, "InputStream解析失敗", ex);
             }
         }
@@ -108,6 +112,7 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
                     list_data.add(new HashMap<String, String>(hashTmp));
                 }
             } catch (JSONException ex) {
+                Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
                 Log.e(DEBUG_TAG, "JSON解析失敗", ex);
             }
 
@@ -122,11 +127,11 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
                     Intent intent = new Intent(ArticleListActivity.getInstance().getApplication(), ArticleDetailActivity.class);
                     intent.putExtra("hashMapKey",list_data.get(position));
                     ArticleListActivity.getInstance().startActivity(intent);
-
-                    // HashMap<String, String> hashTmp = (HashMap<String, String>) getIntent().getExtras().get("hashMapKey");
                 }
             });
 
+        } else {
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
         }
     }
 

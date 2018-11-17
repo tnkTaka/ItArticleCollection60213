@@ -3,7 +3,6 @@ package local.hal.st32.android.itarticlecollection60213;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -148,8 +147,6 @@ public class PostMyArticle extends AsyncTask<PostItem, String, String> {
                 Log.e(DEBUG_TAG, "JSON解析失敗", ex);
             }
             onProgressUpdate(ArticleAddActivity.getInstance().getApplicationContext().getString(R.string.msg_parse_after));
-
-            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの送信に成功しました", Toast.LENGTH_SHORT).show();
 
             String message = ArticleAddActivity.getInstance().getApplicationContext().getString(R.string.dig_msg_title) + title
                     + "\n" + ArticleAddActivity.getInstance().getApplicationContext().getString(R.string.dig_msg_url) + url
