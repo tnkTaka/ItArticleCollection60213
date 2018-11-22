@@ -18,7 +18,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        HashMap<String, String> hashTmp = (HashMap<String, String>) getIntent().getExtras().get("hashMapKey");
+        HashMap<String, String> hashTmp = (HashMap<String, String>) getIntent().getExtras().get("Article");
 
         TextView title = findViewById(R.id.tvTitle);
         title.setText(hashTmp.get("title"));

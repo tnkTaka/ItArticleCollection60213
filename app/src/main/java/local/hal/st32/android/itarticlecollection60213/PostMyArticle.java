@@ -22,18 +22,6 @@ public class PostMyArticle extends AsyncTask<PostItem, Void, String> {
 
     @Override
     public String doInBackground(PostItem... params) {
-
-        Log.d(DEBUG_TAG,""
-                +params[0].postUrl+"::"
-                +params[0].title+"::"
-                +params[0].articleUrl+"::"
-                +params[0].comment+"::"
-                +params[0].lastName+"::"
-                +params[0].firstName+"::"
-                +params[0].studentId+"::"
-                +params[0].seatNo+"::"
-        );
-
         String postData = "title=" + params[0].title
                 + "&url=" + params[0].articleUrl
                 + "&comment=" + params[0].comment
@@ -66,7 +54,6 @@ public class PostMyArticle extends AsyncTask<PostItem, Void, String> {
 
             result = is2String(is);
             _success = true;
-
         } catch (SocketTimeoutException ex) {
             getToast();
             Log.e(DEBUG_TAG, "タイムアウト", ex);
@@ -89,7 +76,6 @@ public class PostMyArticle extends AsyncTask<PostItem, Void, String> {
                 Log.e(DEBUG_TAG, "InputStream解析失敗", ex);
             }
         }
-
         return result;
     }
 

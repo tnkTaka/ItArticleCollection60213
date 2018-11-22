@@ -21,7 +21,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -35,6 +38,8 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
 
     private ListView _listView;
 
+    private ArrayList<HashMap<String, String>> list_data = new ArrayList<HashMap<String, String>>();
+
     public GetListArticles(ListView listView) {
         _listView = listView;
     }
@@ -45,7 +50,6 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
         HttpURLConnection con = null;
         InputStream is = null;
         String result = "";
-
         try {
             URL url = new URL(urlStr);
             con = (HttpURLConnection) url.openConnection();
@@ -86,29 +90,27 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
                 Log.e(DEBUG_TAG, "InputStream解析失敗", ex);
             }
         }
-
         return result;
     }
 
     @Override
-    public void onPostExecute(String data) {
+    public void onPostExecute(String jsonData) {
         if (_success) {
-            final ArrayList<HashMap<String, String>> list_data = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> hashTmp = new HashMap<String, String>();
-
             try {
-                JSONObject rootJSON = new JSONObject(data);
+                JSONObject rootJSON = new JSONObject(jsonData);
                 JSONArray lists = rootJSON.getJSONArray("list");
                 for (int i = 0; i < lists.length(); i++) {
+                    HashMap<String, String> articles = new HashMap<String, String>();
                     JSONObject list = lists.getJSONObject(i);
-                    hashTmp.put("title", list.getString("title"));
-                    hashTmp.put("comment", list.getString("comment"));
-                    hashTmp.put("url",list.getString("url"));
-                    hashTmp.put("studentId",list.getString("student_id"));
-                    hashTmp.put("seatNo",list.getString("seat_no"));
-                    hashTmp.put("name", list.getString("last_name")+list.getString("first_name"));
-                    hashTmp.put("createdAt",list.getString("created_at"));
-                    list_data.add(new HashMap<String, String>(hashTmp));
+                    articles.put("id", list.getString("id"));
+                    articles.put("title", list.getString("title"));
+                    articles.put("comment", list.getString("comment"));
+                    articles.put("url",list.getString("url"));
+                    articles.put("studentId",list.getString("student_id"));
+                    articles.put("seatNo",list.getString("seat_no"));
+                    articles.put("name", list.getString("last_name")+list.getString("first_name"));
+                    articles.put("createdAt",remakeDate(list.getString("created_at")));
+                    list_data.add(articles);
                 }
             } catch (JSONException ex) {
                 getToast();
@@ -116,13 +118,13 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
             }
 
             SimpleAdapter adapter = new SimpleAdapter(ArticleListActivity.getInstance().getApplicationContext(), list_data, R.layout.list_item,
-                    new String[]{"name", "title", "comment"}, new int[]{R.id.item_right, R.id.item_main, R.id.item_sub});
+                    new String[]{"createdAt","name", "title", "comment"}, new int[]{R.id.item_right_bottom,R.id.item_right_top, R.id.item_main, R.id.item_sub});
 
             _listView.setAdapter(adapter);
             _listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(ArticleListActivity.getInstance().getApplication(), ArticleDetailActivity.class);
-                    intent.putExtra("hashMapKey",list_data.get(position));
+                    intent.putExtra("Article",list_data.get(position));
                     ArticleListActivity.getInstance().startActivity(intent);
                 }
             });
@@ -148,5 +150,18 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
         }else{
             Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String remakeDate(String _date){
+        String remakeDate = "";
+        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat strDate = new SimpleDateFormat("yyyy年MM月dd日 HH時");
+        try {
+            Date d = date.parse(_date);
+            remakeDate = strDate.format(d);
+        } catch (ParseException ex) {
+            Log.e(DEBUG_TAG,"日付変換miss",ex);
+        }
+        return remakeDate;
     }
 }
