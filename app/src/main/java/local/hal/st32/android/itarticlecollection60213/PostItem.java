@@ -1,5 +1,6 @@
 package local.hal.st32.android.itarticlecollection60213;
 
+// サーバーへ送信する情報の構造体
 public class PostItem {
     String postUrl;
     String title;

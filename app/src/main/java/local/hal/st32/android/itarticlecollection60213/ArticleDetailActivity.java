@@ -14,12 +14,15 @@ public class ArticleDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_detail);
 
+        // 戻るボタン追加
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        // ArticleListActivityで選択された記事のハッシュマップデータを受け取る
         HashMap<String, String> hashTmp = (HashMap<String, String>) getIntent().getExtras().get("Article");
 
+        // ハッシュマップデータから各情報をTextViewへ表示
         TextView title = findViewById(R.id.tvTitle);
         title.setText(hashTmp.get("title"));
 
@@ -43,8 +46,9 @@ public class ArticleDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            // 戻るボタンが押されたらfinish()する
             case  android.R.id.home:
                 finish();
                 break;

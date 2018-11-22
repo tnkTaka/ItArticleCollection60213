@@ -18,8 +18,10 @@ public class PostMyArticle extends AsyncTask<PostItem, Void, String> {
 
     private static final String DEBUG_TAG = "PostMyArticle";
 
+    // 通信の状況を管理するフラグ
     private boolean _success = false;
 
+    // 引数の構造体(PostItem)から必要な情報を取得しサーバーへ送信
     @Override
     public String doInBackground(PostItem... params) {
         String postData = "title=" + params[0].title
@@ -79,6 +81,7 @@ public class PostMyArticle extends AsyncTask<PostItem, Void, String> {
         return result;
     }
 
+    // 正常にサーバーへ送信できたらfinish()してArticleListActivityへ遷移
     @Override
     public void onPostExecute(String result) {
         getToast();
@@ -98,7 +101,8 @@ public class PostMyArticle extends AsyncTask<PostItem, Void, String> {
         return sb.toString();
     }
 
-    private void getToast(){
+    // 通信状況に合ったToastを表示
+    private void getToast() {
         if (_success){
             Toast.makeText(ArticleAddActivity.getInstance().getApplicationContext(), "データの送信に成功しました", Toast.LENGTH_SHORT).show();
         }else{
