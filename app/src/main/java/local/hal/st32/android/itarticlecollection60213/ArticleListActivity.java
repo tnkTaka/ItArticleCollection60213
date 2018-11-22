@@ -3,7 +3,6 @@ package local.hal.st32.android.itarticlecollection60213;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -18,7 +17,6 @@ public class ArticleListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
 
-        Log.d("検証","CR");
         instance = this;
 
         _listView = findViewById(R.id.listView);
@@ -30,8 +28,6 @@ public class ArticleListActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("検証","RS");
-
         GetListArticles getListArticles = new GetListArticles(_listView);
         getListArticles.execute(GET_ACCESS_URL);
     }

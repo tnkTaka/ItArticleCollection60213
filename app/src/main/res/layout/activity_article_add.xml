@@ -97,22 +97,6 @@
                 android:inputType="number"
                 android:maxLength="2"/>
 
-            <TextView
-                android:id="@+id/tvProcess"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text=""
-                android:textSize="15sp"/>
-
-            <TextView
-                android:id="@+id/tvResult"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text=""
-                android:textSize="15sp"/>
-
         </LinearLayout>
     </ScrollView>
 
