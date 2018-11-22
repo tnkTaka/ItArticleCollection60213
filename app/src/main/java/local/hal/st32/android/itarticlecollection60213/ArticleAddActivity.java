@@ -67,7 +67,6 @@ public class ArticleAddActivity extends AppCompatActivity {
 
                 PostMyArticle postMyArticle = new PostMyArticle();
                 postMyArticle.execute(p);
-
                 break;
         }
         return super.onOptionsItemSelected(item);
