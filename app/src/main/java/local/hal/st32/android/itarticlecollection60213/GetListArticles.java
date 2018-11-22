@@ -34,16 +34,20 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
 
     private static final String DEBUG_TAG = "GetListArticles";
 
+    // 通信とJSON解析の状況を管理するフラグ
     private boolean _success = false;
 
     private ListView _listView;
 
-    private ArrayList<HashMap<String, String>> list_data = new ArrayList<HashMap<String, String>>();
+    // ListViewに表示するArrayList、中身はハッシュマップ(key(String),value(String))
+    private ArrayList<HashMap<String, String>> listData = new ArrayList<HashMap<String, String>>();
 
+    // ArticleListActivityのListViewをこのクラスで引き継ぐコンストラクタ
     public GetListArticles(ListView listView) {
         _listView = listView;
     }
 
+    // 引数からアクセス先URLを取得しJSONを取りに行く
     @Override
     public String doInBackground(String... params) {
         String urlStr = params[0];
@@ -93,11 +97,13 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
         return result;
     }
 
+    // doInBackgroundからJSONを取得しSimpleAdapterへJSONデータをセット
     @Override
     public void onPostExecute(String jsonData) {
         if (_success) {
             try {
                 JSONObject rootJSON = new JSONObject(jsonData);
+                // JSON内のListをハッシュマップへ追加し、そのハッシュマップをArrayList(listData)へ追加する
                 JSONArray lists = rootJSON.getJSONArray("list");
                 for (int i = 0; i < lists.length(); i++) {
                     HashMap<String, String> articles = new HashMap<String, String>();
@@ -110,21 +116,23 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
                     articles.put("seatNo",list.getString("seat_no"));
                     articles.put("name", list.getString("last_name")+list.getString("first_name"));
                     articles.put("createdAt",remakeDate(list.getString("created_at")));
-                    list_data.add(articles);
+                    listData.add(articles);
                 }
             } catch (JSONException ex) {
                 getToast();
                 Log.e(DEBUG_TAG, "JSON解析失敗", ex);
             }
 
-            SimpleAdapter adapter = new SimpleAdapter(ArticleListActivity.getInstance().getApplicationContext(), list_data, R.layout.list_item,
+            // ArrayList(listData)の中身(ハッシュマップ化された"createdAt","name","title","comment")をSimpleAdapterへセットする
+            SimpleAdapter adapter = new SimpleAdapter(ArticleListActivity.getInstance().getApplicationContext(), listData, R.layout.list_item,
                     new String[]{"createdAt","name", "title", "comment"}, new int[]{R.id.item_right_bottom,R.id.item_right_top, R.id.item_main, R.id.item_sub});
 
             _listView.setAdapter(adapter);
             _listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // クリックされたListViewの要素と同じindexのハッシュマップデータをArticleDetailActivityへ渡す
                     Intent intent = new Intent(ArticleListActivity.getInstance().getApplication(), ArticleDetailActivity.class);
-                    intent.putExtra("Article",list_data.get(position));
+                    intent.putExtra("Article",listData.get(position));
                     ArticleListActivity.getInstance().startActivity(intent);
                 }
             });
@@ -144,6 +152,7 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
         return sb.toString();
     }
 
+    // 通信とJSON解析の状況に合ったToastを表示
     private void getToast(){
         if (_success){
             Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に成功しました", Toast.LENGTH_SHORT).show();
@@ -152,7 +161,8 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
         }
     }
 
-    private String remakeDate(String _date){
+    // 日付を良い感じにして返す
+    private String remakeDate(String _date) {
         String remakeDate = "";
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat strDate = new SimpleDateFormat("yyyy年MM月dd日 HH時");

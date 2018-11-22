@@ -9,8 +9,10 @@ import android.widget.EditText;
 
 public class ArticleAddActivity extends AppCompatActivity {
 
+    // POSTするACCESS先URL
     private static final String POST_ACCESS_URL = "http://hal.architshin.com/st32/insertItArticle.php";
 
+    // このActivityのinstanceを宣言(PostMyArticleクラスにてこのActivityのinstanceを使用する)
     private static ArticleAddActivity instance = null;
 
     private EditText _etTitle;
@@ -26,8 +28,10 @@ public class ArticleAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_add);
 
+        // このActivityのinstanceを入れる
         instance = this;
 
+        // 戻るボタン追加
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -44,6 +48,7 @@ public class ArticleAddActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+        // アクションバーに登録マークのメニューを追加
         inflater.inflate(R.menu.article_add_menu, menu);
         return true;
     }
@@ -51,9 +56,12 @@ public class ArticleAddActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            // 戻るボタンが押されたらfinish()する
             case android.R.id.home:
                 finish();
                 break;
+            // 登録ボタンが押されたら構造体(PostItem)へURL情報と入力情報をセットし、
+            // PostMyArticleクラスにて非同期でサーバーへ構造体(PostItem)の内容を送信する
             case R.id.addButton:
                 PostItem p = new PostItem();
                 p.postUrl = POST_ACCESS_URL;
