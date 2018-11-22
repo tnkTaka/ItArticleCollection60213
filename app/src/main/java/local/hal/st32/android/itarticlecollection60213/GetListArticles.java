@@ -17,7 +17,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
@@ -53,10 +52,8 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
             con.setRequestMethod("GET");
             con.setConnectTimeout(5000);
             con.setReadTimeout(5000);
-            con.setDoOutput(true);
-            OutputStream os = con.getOutputStream();
-            os.flush();
-            os.close();
+            con.connect();
+
             int status = con.getResponseCode();
             if (status != 200) {
                 throw new IOException("ステータスコード:" + status);
@@ -64,15 +61,17 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
             is = con.getInputStream();
 
             result = is2String(is);
+
             _success = true;
+
         } catch (SocketTimeoutException ex) {
-            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
+            getToast();
             Log.e(DEBUG_TAG, "タイムアウト", ex);
         } catch (MalformedURLException ex) {
-            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
+            getToast();
             Log.e(DEBUG_TAG, "URL変換失敗", ex);
         } catch (IOException ex) {
-            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
+            getToast();
             Log.e(DEBUG_TAG, "通信失敗", ex);
         } finally {
             if (con != null) {
@@ -83,7 +82,7 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
                     is.close();
                 }
             } catch (IOException ex) {
-                Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
+                getToast();
                 Log.e(DEBUG_TAG, "InputStream解析失敗", ex);
             }
         }
@@ -112,11 +111,9 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
                     list_data.add(new HashMap<String, String>(hashTmp));
                 }
             } catch (JSONException ex) {
-                Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
+                getToast();
                 Log.e(DEBUG_TAG, "JSON解析失敗", ex);
             }
-
-            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に成功しました", Toast.LENGTH_SHORT).show();
 
             SimpleAdapter adapter = new SimpleAdapter(ArticleListActivity.getInstance().getApplicationContext(), list_data, R.layout.list_item,
                     new String[]{"name", "title", "comment"}, new int[]{R.id.item_right, R.id.item_main, R.id.item_sub});
@@ -130,9 +127,8 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
                 }
             });
 
-        } else {
-            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
         }
+        getToast();
     }
 
     private String is2String(InputStream is) throws IOException {
@@ -144,5 +140,13 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
             sb.append(b, 0, line);
         }
         return sb.toString();
+    }
+
+    private void getToast(){
+        if (_success){
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に成功しました", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(ArticleListActivity.getInstance().getApplicationContext(), "データの取得に失敗しました", Toast.LENGTH_SHORT).show();
+        }
     }
 }
