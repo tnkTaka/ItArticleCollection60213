@@ -1,6 +1,8 @@
 package local.hal.st32.android.itarticlecollection60213;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -84,10 +86,11 @@ public class PostMyArticle extends AsyncTask<PostItem, Void, String> {
     // 正常にサーバーへ送信できたらfinish()してArticleListActivityへ遷移
     @Override
     public void onPostExecute(String result) {
-        getToast();
         if (_success) {
             ArticleAddActivity.getInstance().finish();
         }
+        getToast();
+        _success = false;
     }
 
     private String is2String(InputStream is) throws IOException {
@@ -106,7 +109,21 @@ public class PostMyArticle extends AsyncTask<PostItem, Void, String> {
         if (_success){
             Toast.makeText(ArticleAddActivity.getInstance().getApplicationContext(), "データの送信に成功しました", Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(ArticleAddActivity.getInstance().getApplicationContext(), "データの送信に失敗しました", Toast.LENGTH_SHORT).show();
+            // 失敗した場合、ダイアログを表示する
+            AlertDialog.Builder builder = new AlertDialog.Builder(ArticleListActivity.getInstance().getApplicationContext());
+            builder.setMessage("データの取得に失敗しました。もう一度入力しますか？")
+                    .setPositiveButton("はい", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    })
+                    .setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            ArticleAddActivity.getInstance().finish();
+                        }
+                    });
+            builder.show();
         }
     }
 }
