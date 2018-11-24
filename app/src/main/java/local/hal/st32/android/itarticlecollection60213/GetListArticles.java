@@ -69,9 +69,7 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
             is = con.getInputStream();
 
             result = is2String(is);
-
             _success = true;
-
         } catch (SocketTimeoutException ex) {
             getToast();
             Log.e(DEBUG_TAG, "タイムアウト", ex);
@@ -139,6 +137,7 @@ public class GetListArticles extends AsyncTask<String, Void, String> {
 
         }
         getToast();
+        _success = false;
     }
 
     private String is2String(InputStream is) throws IOException {
